@@ -3,6 +3,7 @@ from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
 from dotenv import load_dotenv
 import os
+import numpy
 
 load_dotenv()
 CHROMADB_PATH = os.getenv("CHROMADB_PATH")
