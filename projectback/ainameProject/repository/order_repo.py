@@ -27,6 +27,7 @@ class OrderRepository:
                 package_id=package.id,
                 amount=package.price,
                 credit_count=package.credit_count,
+                package_type=package.type,
                 status="pending"
             )
             self.session.add(order)
@@ -54,16 +55,27 @@ class OrderRepository:
             order.status = "paid"
             order.alipay_trade_no = alipay_trade_no
             order.paid_at = datetime.now()
-            # 增加次数
+            # 增加次数（按套餐类型发放到对应账户）
             userCredit: UserCredit = await self.session.scalar(select(UserCredit).where(UserCredit.user_id == order.user_id).with_for_update())
-            userCredit.balance = userCredit.balance + order.credit_count
+            if order.package_type == "logo":
+                userCredit.logo_balance = userCredit.logo_balance + order.credit_count
 
-            log = CreditLog(
-                user_id=order.user_id,
-                change_count=order.credit_count,
-                balance_after=userCredit.balance,
-                type="recharge",
-                remark=f"支付成功，充值次数为{order.credit_count}"
-            )
+                log = CreditLog(
+                    user_id=order.user_id,
+                    change_count=order.credit_count,
+                    balance_after=userCredit.logo_balance,
+                    type="recharge_logo",
+                    remark=f"支付成功，充值Logo次数为{order.credit_count}"
+                )
+            else:
+                userCredit.balance = userCredit.balance + order.credit_count
+
+                log = CreditLog(
+                    user_id=order.user_id,
+                    change_count=order.credit_count,
+                    balance_after=userCredit.balance,
+                    type="recharge",
+                    remark=f"支付成功，充值次数为{order.credit_count}"
+                )
             self.session.add(log)
             return order,True

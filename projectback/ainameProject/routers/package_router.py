@@ -8,10 +8,11 @@ router = APIRouter(prefix="/package")
 
 @router.get("/list", response_model=list[PackageOut])
 async def package_list(
+        type: str = None,
         session: AsyncSession = Depends(get_session),
 ):
     package_repo = PackageRepository(session=session)
-    packages = await package_repo.get_all_packages()
+    packages = await package_repo.get_all_packages(package_type=type)
     return packages
 
 @router.get("/package/{package_id}")

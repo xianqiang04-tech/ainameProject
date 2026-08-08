@@ -12,6 +12,7 @@ class UserOrder(Base):
     package_id: Mapped[int] = mapped_column(Integer,ForeignKey("package.id"),nullable=False)
     amount: Mapped[Decimal] = mapped_column(Numeric(10,2),nullable=False)
     credit_count: Mapped[int] = mapped_column(Integer,nullable=False)
+    package_type: Mapped[str] = mapped_column(String(20),default="name",nullable=False)
     status: Mapped[str] = mapped_column(String(100),default="pending",nullable=False)
     alipay_trade_no: Mapped[str] = mapped_column(String(100),nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime,default=datetime.now(),nullable=False)

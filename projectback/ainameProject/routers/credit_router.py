@@ -14,5 +14,8 @@ async def get_credit_balance(
         session: AsyncSession = Depends(get_session),
 ):
     credit_repo = CreditRepository(session=session)
-    balance = await credit_repo.get_credit(user_id=user_id)
-    return CreditBalanceOut(balance=balance)
+    credit = await credit_repo.get_credit_detail(user_id=user_id)
+    return CreditBalanceOut(
+        balance=credit.balance if credit else 0,
+        logo_balance=credit.logo_balance if credit else 0,
+    )

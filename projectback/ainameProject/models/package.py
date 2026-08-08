@@ -10,6 +10,7 @@ class Package(Base):
     name: Mapped[str] = mapped_column(String(100),unique=True,nullable=False)
     price: Mapped[Decimal] = mapped_column(Numeric(10,2),nullable=False)
     credit_count: Mapped[int] = mapped_column(Integer,nullable=False)
+    type: Mapped[str] = mapped_column(String(20),default="name",nullable=False)
     is_active: Mapped[bool] = mapped_column(Boolean,default=True,nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime,default=datetime.now(),nullable=False)
     

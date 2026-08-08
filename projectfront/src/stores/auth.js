@@ -3,7 +3,7 @@ import { accountApi } from '../api'
 import { STORAGE_KEYS, clearSessionStorage, readStoredUser } from '../utils/storage'
 
 export const useAuthStore = defineStore('auth', {
-  state: () => ({ user: readStoredUser(), balance: null }),
+  state: () => ({ user: readStoredUser(), balance: null, logoBalance: null }),
   actions: {
     setSession(session) {
       this.user = session.user
@@ -14,12 +14,14 @@ export const useAuthStore = defineStore('auth', {
     async refreshBalance() {
       const data = await accountApi.balance()
       this.balance = data.balance
+      this.logoBalance = data.logo_balance
       return data.balance
     },
     logout() {
       clearSessionStorage()
       this.user = null
       this.balance = null
+      this.logoBalance = null
     },
   },
 })

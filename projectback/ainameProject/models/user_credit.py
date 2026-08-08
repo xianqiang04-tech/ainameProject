@@ -10,6 +10,8 @@ class UserCredit(Base):
     balance:Mapped[int] = MappedColumn(Integer,default=0,nullable=False)
     total_used:Mapped[int] = MappedColumn(Integer,default=0,nullable=False)
     total_recharged:Mapped[int] = MappedColumn(Integer,default=0,nullable=False)
+    logo_balance:Mapped[int] = MappedColumn(Integer,default=0,nullable=False)
+    logo_total_used:Mapped[int] = MappedColumn(Integer,default=0,nullable=False)
     created_at:Mapped[datetime] = MappedColumn(DateTime,default=datetime.now,nullable=False)
     updated_at:Mapped[datetime] = MappedColumn(DateTime,default=datetime.now,onupdate=datetime.now,nullable=False)
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
-from typing import Any, Generic, TypeVar
+from typing import Any, Generic, Literal, TypeVar
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
 
@@ -36,11 +36,13 @@ class DashboardOut(BaseModel):
 
 class AdminUserListItemOut(AdminMeOut):
     balance: int
+    logo_balance: int
 
 
 class AdminUserDetailOut(AdminUserListItemOut):
     total_used: int
     total_recharged: int
+    logo_total_used: int
     order_count: int
     paid_order_count: int
 
@@ -58,6 +60,7 @@ class UserStatusOut(BaseModel):
 
 class CreditAdjustIn(BaseModel):
     change_count: int = Field(ge=-100000, le=100000)
+    account_type: Literal["name", "logo"] = "name"
     reason: str = Field(min_length=1, max_length=500)
     model_config = ConfigDict(str_strip_whitespace=True)
 
@@ -78,6 +81,7 @@ class AdminPackageCreateIn(BaseModel):
     name: str = Field(min_length=1, max_length=100)
     price: Decimal = Field(ge=0, max_digits=10, decimal_places=2)
     credit_count: int = Field(ge=1)
+    type: Literal["name", "logo"] = "name"
     is_active: bool = True
     reason: str | None = Field(default=None, min_length=1, max_length=500)
     model_config = ConfigDict(str_strip_whitespace=True)
@@ -89,6 +93,7 @@ class AdminPackageUpdateIn(BaseModel):
         default=None, ge=0, max_digits=10, decimal_places=2
     )
     credit_count: int | None = Field(default=None, ge=1)
+    type: Literal["name", "logo"] | None = None
     is_active: bool | None = None
     reason: str = Field(min_length=1, max_length=500)
     model_config = ConfigDict(str_strip_whitespace=True)
@@ -97,7 +102,7 @@ class AdminPackageUpdateIn(BaseModel):
     def validate_changes(self):
         if all(
             value is None
-            for value in (self.name, self.price, self.credit_count, self.is_active)
+            for value in (self.name, self.price, self.credit_count, self.type, self.is_active)
         ):
             raise ValueError("至少提供一个需要修改的套餐字段")
         return self
@@ -108,6 +113,7 @@ class AdminPackageOut(BaseModel):
     name: str
     price: Decimal
     credit_count: int
+    type: str
     is_active: bool
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)

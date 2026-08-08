@@ -6,4 +6,5 @@ class PackageOut(BaseModel):
     name: str
     price: Decimal
     credit_count: int
+    type: str
     model_config = ConfigDict(from_attributes=True)

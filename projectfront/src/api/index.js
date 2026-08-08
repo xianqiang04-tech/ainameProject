@@ -29,10 +29,10 @@ export const accountApi = {
 }
 export const knowledgeApi = { upload: (filePath) => uploadFile({ url: '/knowledge/upload', filePath }) }
 export const logoApi = {
-  generate: (data) => request({ url: '/logos/generate', method: 'POST', data, timeout: 210000, auth: false }),
+  generate: (data) => request({ url: '/logos/generate', method: 'POST', data, timeout: 210000 }),
 }
 export const packageApi = {
-  list: () => request({ url: '/package/list', auth: false }),
+  list: (type) => request({ url: `/package/list${type ? `?type=${encodeURIComponent(type)}` : ''}`, auth: false }),
   detail: (id) => request({ url: `/package/package/${id}`, auth: false }),
   createOrder: (packageId) => request({ url: '/pay/create_order', method: 'POST', data: { package_id: packageId } }),
 }

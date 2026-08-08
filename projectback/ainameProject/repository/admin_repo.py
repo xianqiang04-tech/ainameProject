@@ -67,6 +67,7 @@ class AdminRepository:
                 User.created_at,
                 User.last_login_at,
                 func.coalesce(UserCredit.balance, 0).label("balance"),
+                func.coalesce(UserCredit.logo_balance, 0).label("logo_balance"),
             )
             .outerjoin(UserCredit, UserCredit.user_id == User.id)
             .where(*filters)
@@ -91,6 +92,10 @@ class AdminRepository:
                 func.coalesce(UserCredit.total_used, 0).label("total_used"),
                 func.coalesce(UserCredit.total_recharged, 0).label(
                     "total_recharged"
+                ),
+                func.coalesce(UserCredit.logo_balance, 0).label("logo_balance"),
+                func.coalesce(UserCredit.logo_total_used, 0).label(
+                    "logo_total_used"
                 ),
             )
             .outerjoin(UserCredit, UserCredit.user_id == User.id)

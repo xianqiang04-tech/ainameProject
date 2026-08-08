@@ -81,22 +81,28 @@ class AdminService:
                     balance=0,
                     total_used=0,
                     total_recharged=0,
+                    logo_balance=0,
+                    logo_total_used=0,
                 )
                 self.session.add(credit)
                 await self.session.flush()
 
-            before_balance = credit.balance
+            is_logo = data.account_type == "logo"
+            before_balance = credit.logo_balance if is_logo else credit.balance
             new_balance = before_balance + data.change_count
             if new_balance < 0:
                 raise HTTPException(HTTP_409_CONFLICT, "调整后余额不能小于 0")
 
-            credit.balance = new_balance
+            if is_logo:
+                credit.logo_balance = new_balance
+            else:
+                credit.balance = new_balance
             self.session.add(
                 CreditLog(
                     user_id=user_id,
                     change_count=data.change_count,
                     balance_after=new_balance,
-                    type="admin_adjust",
+                    type="admin_adjust_logo" if is_logo else "admin_adjust",
                     remark=f"管理员调整：{data.reason}"[:200],
                 )
             )
@@ -106,6 +112,7 @@ class AdminService:
                 target_type="user_credit",
                 target_id=str(user_id),
                 changes={
+                    "account_type": data.account_type,
                     "before": {"balance": before_balance},
                     "after": {"balance": new_balance},
                     "change_count": data.change_count,
@@ -133,6 +140,7 @@ class AdminService:
                 name=name,
                 price=data.price,
                 credit_count=data.credit_count,
+                type=data.type,
                 is_active=data.is_active,
             )
             self.session.add(package)
@@ -171,6 +179,8 @@ class AdminService:
                 package.price = data.price
             if data.credit_count is not None:
                 package.credit_count = data.credit_count
+            if data.type is not None:
+                package.type = data.type
             if data.is_active is not None:
                 package.is_active = data.is_active
 
@@ -231,5 +241,6 @@ class AdminService:
             "name": package.name,
             "price": str(Decimal(package.price)),
             "credit_count": package.credit_count,
+            "type": package.type,
             "is_active": package.is_active,
         }
