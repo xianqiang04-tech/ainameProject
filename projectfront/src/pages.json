@@ -1,0 +1,28 @@
+{
+	"pages": [
+		{ "path": "pages/auth/auth", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/naming/naming", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/knowledge/knowledge", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/logo/logo", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/profile/profile", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/packages/packages", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/login", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/dashboard", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/users", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/user-detail", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/packages", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/orders", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/order-detail", "style": { "navigationStyle": "custom" } },
+		{ "path": "pages/admin/audit", "style": { "navigationStyle": "custom" } }
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "智能起名",
+		"navigationBarBackgroundColor": "#F4F6F5",
+		"backgroundColor": "#F4F6F5"
+	},
+	"h5": {
+		"title": "智能起名",
+		"router": { "mode": "hash" }
+	}
+}

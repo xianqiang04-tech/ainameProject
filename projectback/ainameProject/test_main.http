@@ -1,0 +1,154 @@
+# Test your FastAPI endpoints
+
+GET http://127.0.0.1:8000/
+Accept: application/json
+
+###
+
+GET http://127.0.0.1:8000/hello/User
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/email
+Accept: application/json
+
+###
+GET http://127.0.0.1:8000/auth/code?email=1647658863@qq.com
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/auth/register
+Content-Type: application/json
+Accept: application/json
+
+{
+"email": "1647658863@qq.com",
+"username": "fxq",
+"password": "123456",
+"confirm_password": "123456",
+"code":"7301"
+}
+
+###
+POST http://127.0.0.1:8000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "1647658863@qq.com",
+  "password": "123456"
+}
+
+###
+POST http://127.0.0.1:8000/name/get_name
+Content-Type: application/json
+Accept: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0Njk5NDI4fQ.OLnDdqla3ivsnd_tJmeTbTT48tAy2sa05yP5SrM7vmk
+
+{
+  "surname":"张",
+  "gender":"女",
+  "length":"两字",
+  "other":"希望名字里带点水的意象",
+  "exclude":[]
+}
+
+###
+GET http://127.0.0.1:8000/credit/balance
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0NTQwMDcyfQ.FL0NzlhoPWAOCZchHq-QXG_y_a2ckGF4c8XriRXkCes
+
+###
+GET http://127.0.0.1:8000/package/list
+Accept: application/json
+
+###
+GET http://127.0.0.1:8000/package/package/1
+Accept: application/json
+
+###
+POST http://127.0.0.1:8000/pay/create_order
+Content-Type: application/json
+Accept: application/json
+Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1MTM4MTU4fQ.iaGCb1eA9UImAiFqKIOAAhZByWFfQ1320yixJuW7MSU
+
+{
+  "package_id":3
+}
+
+###
+POST http://127.0.0.1:8000/name/get_name
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1MTM2OTQ4fQ.Zp3LD_Zp37SXXNLta3J5dnqa5lSxKpu76L9MwNKswj0
+
+{
+"category": "宠物名",
+"length": "两字",
+"gender": "不限",
+"other": "是一只非常调皮的金毛犬，毛发金黄，希望名字听起来活泼可爱"
+}
+
+###
+POST http://127.0.0.1:8000/name/get_name
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1MzExNzU4fQ.-E34_K-fRtK8LbjZQFzzAV1CTSw4zQIPnNV7-a8TlU8
+
+{
+"category": "企业名",
+"length": "不限",
+"gender": "不限",
+"other": "一家做人工智能自动化浏览器的科技创新公司，希望大气"
+}
+
+###
+POST http://127.0.0.1:8000/knowledge/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1NzM5NjA2fQ.x1vEKMvBwEUzUg9llu4RhVnnc7Njwt8SScmw4vzYYfM
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="company_rules.txt"
+Content-Type: text/plain
+
+< ./company_rules.txt
+--WebAppBoundary--
+
+###
+POST http://127.0.0.1:8000/auth/login
+Content-Type: application/json
+Accept: application/json
+
+{
+"email":"1647658863@qq.com",
+"password": "123456"
+}
+
+###
+POST http://127.0.0.1:8000/name/generate
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1NDg2MTcwfQ.e0SRgg6qLlMZytjG6oMoTPm2V8d3XxUKvGWJbbh3I7M
+
+{
+ "category":"企业名",
+  "length":"不限",
+  "other": "我们是一个科技公司，生产芯片。",
+  "exclude": []
+}
+
+### 2. 第二轮：带着意见微调
+POST http://127.0.0.1:8000/name/feedback
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJ0eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg1NDc5NDU1fQ.VXfyICwKYpublPHwIhjmqhMRRWbXokzCVgLNECJfXis
+
+{
+  "thread_id": "d43cc9a7-78c5-460e-83a8-fb8af84f9439",
+  "category": "企业名",
+  "feedback": "我喜欢上一轮生成的‘星熠’这个名字。请保留它，并以此为基调，把其他4个名字的第一个字全部换成五行属‘火’的字。"
+}
+
+###
+POST http://127.0.0.1:8000/logos/generate
+Content-Type: application/json
+Accept: application/json
+
+{ "company_name": "青衍科技", "style_feedback": "logo设计不要有汉字元素" }
