@@ -1,6 +1,6 @@
 from http.client import HTTPException
 
-from pydantic import BaseModel, EmailStr, Field, model_validator, ValidationError
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator, ValidationError
 from typing import Annotated
 
 RawPasswordStr = Annotated[str,Field(...,min_length=6,max_length=10)]
@@ -33,6 +33,8 @@ class LoginIn(BaseModel):
 class UserSchema(BaseModel):
     email: EmailStr
     username: Annotated[str,Field(min_length=2,max_length=10)]
+    role: str
+    model_config = ConfigDict(from_attributes=True)
 
 class LoginoutSchema(BaseModel):
    user:UserSchema

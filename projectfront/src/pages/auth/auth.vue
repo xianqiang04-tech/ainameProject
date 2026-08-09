@@ -65,11 +65,13 @@
 import { reactive, ref } from 'vue'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { Check, Mail, UserRound, LockKeyhole, ShieldCheck, LogIn, LoaderCircle } from '@lucide/vue'
-import { authApi } from '../../api'
+import { adminApi, authApi } from '../../api'
 import { useAuthStore } from '../../stores/auth'
-import { hasAccessToken } from '../../utils/storage'
+import { useAdminStore } from '../../stores/admin'
+import { hasAccessToken, readStoredUser } from '../../utils/storage'
 
 const authStore = useAuthStore()
+const adminStore = useAdminStore()
 const mode = ref('login')
 const submitting = ref(false)
 const codeLoading = ref(false)
@@ -78,8 +80,29 @@ const errorMessage = ref('')
 let timer = null
 const form = reactive({ email:'', username:'', password:'', confirmPassword:'', code:'' })
 
-onLoad(() => { if (hasAccessToken()) uni.redirectTo({ url:'/pages/naming/naming' }) })
+onLoad(async () => {
+  if (hasAccessToken()) await enterMatchedHome(readStoredUser())
+})
 onUnload(() => clearInterval(timer))
+
+async function enterMatchedHome(user) {
+  // 兼容旧缓存中尚未保存 role 的管理员会话。
+  if (user?.role === 'admin' || !user?.role) {
+    try {
+      const profile = await adminApi.me()
+      adminStore.setProfile(profile)
+      uni.reLaunch({ url:'/pages/admin/dashboard' })
+      return
+    } catch (error) {
+      if (error.statusCode === 401) return
+      if (error.statusCode !== 403) {
+        errorMessage.value = error.message
+        return
+      }
+    }
+  }
+  uni.reLaunch({ url:'/pages/naming/naming' })
+}
 
 function switchMode(value) { mode.value = value; errorMessage.value = '' }
 function validEmail(value) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) }
@@ -111,7 +134,7 @@ async function submit() {
     }
     const session = await authApi.login({ email:form.email, password:form.password })
     authStore.setSession(session)
-    uni.reLaunch({ url:'/pages/naming/naming' })
+    await enterMatchedHome(session.user)
   } catch (error) { errorMessage.value = error.message } finally { submitting.value = false }
 }
 </script>

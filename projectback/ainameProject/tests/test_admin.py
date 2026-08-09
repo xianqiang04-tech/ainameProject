@@ -11,6 +11,7 @@ from models.user_credit import CreditLog
 from schemas.admin_schemas import AdminPackageCreateIn, AdminPackageUpdateIn
 from schemas.admin_schemas import CreditAdjustIn
 from schemas.admin_schemas import UserStatusUpdateIn
+from schemas.user_schemas import LoginoutSchema
 from services.admin_service import AdminService
 
 
@@ -49,6 +50,18 @@ class FakeAdminRepository:
 
 
 class AdminSchemaTests(unittest.TestCase):
+    def test_login_response_keeps_admin_role(self):
+        response = LoginoutSchema.model_validate(
+            {
+                "user": SimpleNamespace(
+                    email="admin@admin.com", username="admin", role="admin"
+                ),
+                "access_token": "access-token",
+                "refresh_token": "refresh-token",
+            }
+        )
+        self.assertEqual(response.user.role, "admin")
+
     def test_credit_adjust_rejects_zero(self):
         with self.assertRaises(ValueError):
             CreditAdjustIn(change_count=0, reason="test")
